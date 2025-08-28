@@ -2,6 +2,7 @@
 // We export async getters so initialization is lazy and safe in client components/effects.
 
 import { initializeApp, getApps, getApp } from 'firebase/app';
+import { getAnalytics, Analytics, isSupported as isAnalyticsSupported } from 'firebase/analytics';
 import { getAuth, Auth } from 'firebase/auth';
 import { getFirestore, Firestore } from 'firebase/firestore';
 import { getStorage, FirebaseStorage } from 'firebase/storage';
@@ -9,6 +10,7 @@ import { getStorage, FirebaseStorage } from 'firebase/storage';
 let cachedAuth: Auth | null = null;
 let cachedDb: Firestore | null = null;
 let cachedStorage: FirebaseStorage | null = null;
+let cachedAnalytics: Analytics | null = null;
 
 function getFirebaseConfig() {
   return {
@@ -18,6 +20,7 @@ function getFirebaseConfig() {
     storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
     messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
     appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+    measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
   } as const;
 }
 
@@ -62,4 +65,16 @@ export function getClientStorage(): FirebaseStorage {
     cachedStorage = getStorage(app);
   }
   return cachedStorage;
+}
+
+export async function getClientAnalytics(): Promise<Analytics | null> {
+  if (typeof window === 'undefined') {
+    throw new Error('getClientAnalytics must be called on the client');
+  }
+  if (cachedAnalytics) return cachedAnalytics;
+  const supported = await isAnalyticsSupported();
+  if (!supported) return null;
+  const app = ensureClientApp();
+  cachedAnalytics = getAnalytics(app);
+  return cachedAnalytics;
 }
