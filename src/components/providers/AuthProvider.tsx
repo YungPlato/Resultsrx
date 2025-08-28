@@ -11,7 +11,7 @@ import {
   signInWithPopup
 } from 'firebase/auth';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
-import { auth, db } from '@/lib/firebase';
+import { getClientAuth, getClientDb } from '@/lib/firebase';
 
 interface AuthContextType {
   user: User | null;
@@ -29,6 +29,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const auth = getClientAuth();
+    const db = getClientDb();
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         // Check if user document exists, if not create it
@@ -56,6 +58,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const signIn = async (email: string, password: string) => {
     try {
+      const auth = getClientAuth();
       await signInWithEmailAndPassword(auth, email, password);
     } catch (error) {
       throw error;
@@ -64,6 +67,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const signUp = async (email: string, password: string) => {
     try {
+      const auth = getClientAuth();
       const result = await createUserWithEmailAndPassword(auth, email, password);
       // User document will be created in the useEffect above
     } catch (error) {
@@ -73,6 +77,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const signOutUser = async () => {
     try {
+      const auth = getClientAuth();
       await signOut(auth);
     } catch (error) {
       throw error;
@@ -82,6 +87,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const signInWithGoogle = async () => {
     try {
       const provider = new GoogleAuthProvider();
+      const auth = getClientAuth();
       await signInWithPopup(auth, provider);
     } catch (error) {
       throw error;
