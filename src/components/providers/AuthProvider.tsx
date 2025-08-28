@@ -29,31 +29,37 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const auth = getClientAuth();
-    const db = getClientDb();
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        // Check if user document exists, if not create it
-        const userDoc = await getDoc(doc(db, 'users', user.uid));
-        if (!userDoc.exists()) {
-          await setDoc(doc(db, 'users', user.uid), {
-            email: user.email,
-            createdAt: new Date(),
-            subscription: {
-              plan: 'free',
-              status: 'active',
-              currentPeriodEnd: null,
-            },
-          });
+    try {
+      const auth = getClientAuth();
+      const db = getClientDb();
+      const unsubscribe = onAuthStateChanged(auth, async (user) => {
+        if (user) {
+          // Check if user document exists, if not create it
+          const userDoc = await getDoc(doc(db, 'users', user.uid));
+          if (!userDoc.exists()) {
+            await setDoc(doc(db, 'users', user.uid), {
+              email: user.email,
+              createdAt: new Date(),
+              subscription: {
+                plan: 'free',
+                status: 'active',
+                currentPeriodEnd: null,
+              },
+            });
+          }
+          setUser(user);
+        } else {
+          setUser(null);
         }
-        setUser(user);
-      } else {
-        setUser(null);
-      }
-      setLoading(false);
-    });
+        setLoading(false);
+      });
 
-    return unsubscribe;
+      return unsubscribe;
+    } catch (err) {
+      console.error('Auth initialization failed. Check NEXT_PUBLIC_FIREBASE_* env vars.', err);
+      setLoading(false);
+      return () => {};
+    }
   }, []);
 
   const signIn = async (email: string, password: string) => {
