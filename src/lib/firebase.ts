@@ -26,9 +26,15 @@ function getFirebaseConfig() {
 
 function ensureClientApp() {
   const config = getFirebaseConfig();
-  const hasAllKeys = Object.values(config).every(Boolean);
-  if (!hasAllKeys) {
-    throw new Error('Firebase config is missing. Set NEXT_PUBLIC_FIREBASE_* env vars.');
+  const requiredKeys = [
+    config.apiKey,
+    config.authDomain,
+    config.projectId,
+    config.appId,
+  ];
+  const hasRequired = requiredKeys.every(Boolean);
+  if (!hasRequired) {
+    throw new Error('Firebase config is missing required values. Set NEXT_PUBLIC_FIREBASE_API_KEY, AUTH_DOMAIN, PROJECT_ID, APP_ID.');
   }
   const app = getApps().length ? getApp() : initializeApp(config);
   return app;
