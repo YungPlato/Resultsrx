@@ -16,9 +16,11 @@ interface LabResult {
 }
 
 interface AIExplanation {
-  explanation: string;
+  friendlyExplanation: string;
+  testOverview: string;
   whatItMeasures: string;
-  whatItMeans: string;
+  whatYourResultMeans: string;
+  potentialNextSteps: string[];
   suggestedQuestions: string[];
 }
 
@@ -130,34 +132,52 @@ export function LabSubmissionForm({ onClose }: LabSubmissionFormProps) {
           </div>
 
           {/* AI Explanation */}
-          <div className="space-y-4">
+          <div className="space-y-6">
+            <div className="bg-medical-50 p-4 rounded-lg">
+              <p className="text-gray-800 text-lg">
+                {explanation.friendlyExplanation}
+              </p>
+            </div>
+
             <div>
-              <h4 className="font-semibold text-gray-900 mb-2">What This Test Measures</h4>
-              <p className="text-gray-700 bg-gray-50 p-3 rounded-lg">
+              <h4 className="font-semibold text-gray-900 mb-2 text-lg">Test Overview</h4>
+              <p className="text-gray-700 bg-gray-50 p-4 rounded-lg leading-relaxed">
+                {explanation.testOverview}
+              </p>
+            </div>
+
+            <div>
+              <h4 className="font-semibold text-gray-900 mb-2 text-lg">What This Test Measures</h4>
+              <p className="text-gray-700 bg-gray-50 p-4 rounded-lg leading-relaxed">
                 {explanation.whatItMeasures}
               </p>
             </div>
 
             <div>
-              <h4 className="font-semibold text-gray-900 mb-2">What Your Result Means</h4>
-              <p className="text-gray-700 bg-gray-50 p-3 rounded-lg">
-                {explanation.explanation}
+              <h4 className="font-semibold text-gray-900 mb-2 text-lg">What Your Result Means</h4>
+              <p className="text-gray-700 bg-gray-50 p-4 rounded-lg leading-relaxed">
+                {explanation.whatYourResultMeans}
               </p>
             </div>
 
             <div>
-              <h4 className="font-semibold text-gray-900 mb-2">What This Might Indicate</h4>
-              <p className="text-gray-700 bg-gray-50 p-3 rounded-lg">
-                {explanation.whatItMeans}
-              </p>
+              <h4 className="font-semibold text-gray-900 mb-2 text-lg">Potential Next Steps</h4>
+              <ul className="space-y-3 bg-gray-50 p-4 rounded-lg">
+                {explanation.potentialNextSteps.map((step, index) => (
+                  <li key={index} className="flex items-start space-x-3">
+                    <CheckCircle className="w-5 h-5 text-success-500 mt-1 flex-shrink-0" />
+                    <span className="text-gray-700">{step}</span>
+                  </li>
+                ))}
+              </ul>
             </div>
 
             <div>
-              <h4 className="font-semibold text-gray-900 mb-2">Questions to Ask Your Doctor</h4>
-              <ul className="space-y-2">
+              <h4 className="font-semibold text-gray-900 mb-2 text-lg">Questions to Ask Your Doctor</h4>
+              <ul className="space-y-3 bg-gray-50 p-4 rounded-lg">
                 {explanation.suggestedQuestions.map((question, index) => (
-                  <li key={index} className="flex items-start space-x-2">
-                    <span className="text-medical-600 mt-1">•</span>
+                  <li key={index} className="flex items-start space-x-3">
+                    <Beaker className="w-5 h-5 text-medical-600 mt-1 flex-shrink-0" />
                     <span className="text-gray-700">{question}</span>
                   </li>
                 ))}
