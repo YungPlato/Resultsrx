@@ -128,151 +128,143 @@ export default function DashboardPage() {
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Welcome Section */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">
+        <div className="mb-10">
+          <h1 className="text-4xl font-bold text-gray-900">
             Welcome back, {user.email?.split('@')[0]}!
           </h1>
-          <p className="text-gray-600 mt-2">
-            Here's an overview of your lab results and health insights.
+          <p className="text-gray-600 mt-3 text-lg">
+            Here's a summary of your recent activity and health insights.
           </p>
         </div>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <div className="card">
-            <div className="flex items-center">
-              <div className="bg-medical-100 p-3 rounded-lg">
-                <Beaker className="w-6 h-6 text-medical-600" />
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Total Reports</p>
-                <p className="text-2xl font-bold text-gray-900">{totalReports}</p>
-              </div>
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
+          <div className="card flex items-center p-6">
+            <div className="bg-medical-100 p-4 rounded-full">
+              <Beaker className="w-8 h-8 text-medical-700" />
+            </div>
+            <div className="ml-5">
+              <p className="text-md font-medium text-gray-600">Total Reports</p>
+              <p className="text-3xl font-bold text-gray-900">{totalReports}</p>
             </div>
           </div>
 
-          <div className="card">
-            <div className="flex items-center">
-              <div className="bg-success-100 p-3 rounded-lg">
-                <CheckCircle className="w-6 h-6 text-success-600" />
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Normal Results</p>
-                <p className="text-2xl font-bold text-gray-900">
-                  {labReports.filter(r => r.value === 'Normal').length}
-                </p>
-              </div>
+          <div className="card flex items-center p-6">
+            <div className="bg-success-100 p-4 rounded-full">
+              <CheckCircle className="w-8 h-8 text-success-600" />
+            </div>
+            <div className="ml-5">
+              <p className="text-md font-medium text-gray-600">Normal</p>
+              <p className="text-3xl font-bold text-gray-900">
+                {labReports.filter(r => r.value === 'Normal').length}
+              </p>
             </div>
           </div>
 
-          <div className="card">
-            <div className="flex items-center">
-              <div className="bg-warning-100 p-3 rounded-lg">
-                <AlertCircle className="w-6 h-6 text-warning-600" />
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Abnormal Results</p>
-                <p className="text-2xl font-bold text-gray-900">
-                  {labReports.filter(r => r.value !== 'Normal').length}
-                </p>
-              </div>
+          <div className="card flex items-center p-6">
+            <div className="bg-warning-100 p-4 rounded-full">
+              <AlertCircle className="w-8 h-8 text-warning-600" />
+            </div>
+            <div className="ml-5">
+              <p className="text-md font-medium text-gray-600">Abnormal</p>
+              <p className="text-3xl font-bold text-gray-900">
+                {labReports.filter(r => r.value !== 'Normal').length}
+              </p>
             </div>
           </div>
 
-          <div className="card">
-            <div className="flex items-center">
-              <div className="bg-blue-100 p-3 rounded-lg">
-                <Calendar className="w-6 h-6 text-blue-600" />
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">This Month</p>
-                <p className="text-2xl font-bold text-gray-900">
-                  {labReports.filter(r => {
-                    const reportDate = new Date(r.createdAt);
-                    const currentMonth = new Date().getMonth();
-                    return reportDate.getMonth() === currentMonth;
-                  }).length}
-                </p>
-              </div>
+          <div className="card flex items-center p-6">
+            <div className="bg-primary-100 p-4 rounded-full">
+              <Calendar className="w-8 h-8 text-primary-600" />
+            </div>
+            <div className="ml-5">
+              <p className="text-md font-medium text-gray-600">This Month</p>
+              <p className="text-3xl font-bold text-gray-900">
+                {labReports.filter(r => {
+                  const reportDate = new Date(r.createdAt);
+                  const currentMonth = new Date().getMonth();
+                  return reportDate.getMonth() === currentMonth;
+                }).length}
+              </p>
             </div>
           </div>
         </div>
 
         {/* Quick Actions */}
-        <div className="mb-8">
+        <div className="mb-10">
           <div className="flex flex-col sm:flex-row gap-4">
             <button
               onClick={() => setShowForm(true)}
-              className="btn-primary flex items-center justify-center space-x-2"
+              className="btn-primary flex items-center justify-center space-x-2 text-lg"
             >
-              <Plus className="w-5 h-5" />
-              <span>Submit New Lab Result</span>
+              <Plus className="w-6 h-6" />
+              <span>Submit New Result</span>
             </button>
-            <button className="btn-secondary flex items-center justify-center space-x-2">
-              <BarChart3 className="w-5 h-5" />
+            <button className="btn-secondary flex items-center justify-center space-x-2 text-lg">
+              <BarChart3 className="w-6 h-6" />
               <span>View All Reports</span>
             </button>
           </div>
         </div>
 
-        {/* Recent Reports */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-          <div className="card">
+        {/* Recent Reports & Trends */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+          <div className="lg:col-span-2 card">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-semibold text-gray-900">Recent Reports</h2>
-              <button className="text-medical-600 hover:text-medical-700 text-sm font-medium">
+              <h2 className="text-2xl font-semibold text-gray-900">Recent Reports</h2>
+              <button className="text-medical-700 hover:text-medical-800 font-semibold">
                 View All
               </button>
             </div>
             
             {isLoadingReports ? (
-              <div className="text-center py-8">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-medical-600 mx-auto"></div>
-                <p className="mt-2 text-gray-600">Loading reports...</p>
+              <div className="text-center py-12">
+                <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-medical-700 mx-auto"></div>
+                <p className="mt-4 text-gray-600">Loading reports...</p>
               </div>
             ) : recentReports.length > 0 ? (
               <div className="space-y-4">
                 {recentReports.map((report) => (
-                  <div key={report.id} className="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition-colors">
-                    <div className="flex items-center justify-between mb-2">
-                      <h3 className="font-semibold text-gray-900">{report.testName}</h3>
+                  <div key={report.id} className="border border-gray-200 rounded-lg p-5 hover:bg-gray-50 hover:shadow-md transition-all duration-300">
+                    <div className="flex items-center justify-between mb-3">
+                      <h3 className="font-semibold text-gray-900 text-lg">{report.testName}</h3>
                       <span className="text-sm text-gray-500">
                         {new Date(report.createdAt).toLocaleDateString()}
                       </span>
                     </div>
-                    <div className="grid grid-cols-3 gap-4 text-sm mb-3">
+                    <div className="grid grid-cols-3 gap-4 text-md mb-4">
                       <div>
                         <span className="text-gray-600">Value:</span>
-                        <span className="ml-1 font-medium">{report.value} {report.units}</span>
+                        <span className="ml-2 font-bold">{report.value} {report.units}</span>
                       </div>
                       <div>
                         <span className="text-gray-600">Range:</span>
-                        <span className="ml-1 font-medium">{report.normalRange}</span>
+                        <span className="ml-2 font-bold">{report.normalRange}</span>
                       </div>
                       <div>
                         <span className="text-gray-600">Status:</span>
-                        <span className={`ml-1 font-medium ${
+                        <span className={`ml-2 font-bold ${
                           report.value === 'Normal' ? 'text-success-600' : 'text-warning-600'
                         }`}>
                           {report.value === 'Normal' ? 'Normal' : 'Abnormal'}
                         </span>
                       </div>
                     </div>
-                    <p className="text-gray-700 text-sm line-clamp-2">
+                    <p className="text-gray-700 text-md line-clamp-2 mb-3">
                       {report.aiExplanation.explanation}
                     </p>
-                    <button className="text-medical-600 hover:text-medical-700 text-sm font-medium mt-2">
+                    <button className="text-medical-700 hover:text-medical-800 font-semibold text-md">
                       View Details →
                     </button>
                   </div>
                 ))}
               </div>
             ) : (
-              <div className="text-center py-8">
-                <Beaker className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                <h3 className="text-lg font-medium text-gray-900 mb-2">No lab reports yet</h3>
-                <p className="text-gray-600 mb-4">
-                  Submit your first lab result to get started with AI-powered explanations.
+              <div className="text-center py-12">
+                <Beaker className="w-16 h-16 text-gray-300 mx-auto mb-5" />
+                <h3 className="text-xl font-medium text-gray-900 mb-3">No Lab Reports Yet</h3>
+                <p className="text-gray-600 mb-6 max-w-sm mx-auto">
+                  Your journey to understanding your health begins with your first lab result.
                 </p>
                 <button
                   onClick={() => setShowForm(true)}
@@ -284,21 +276,22 @@ export default function DashboardPage() {
             )}
           </div>
 
-          {/* Trends Chart */}
           <div className="card">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-semibold text-gray-900">Health Trends</h2>
-              <TrendingUp className="w-5 h-5 text-medical-600" />
+              <h2 className="text-2xl font-semibold text-gray-900">Health Trends</h2>
+              <TrendingUp className="w-6 h-6 text-medical-700" />
             </div>
             
             {labReports.length > 1 ? (
-              <LabResultsChart reports={labReports} />
+              <div className="h-80">
+                <LabResultsChart reports={labReports} />
+              </div>
             ) : (
-              <div className="text-center py-8">
-                <Activity className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                <h3 className="text-lg font-medium text-gray-900 mb-2">Not enough data yet</h3>
+              <div className="text-center py-12">
+                <Activity className="w-16 h-16 text-gray-300 mx-auto mb-5" />
+                <h3 className="text-xl font-medium text-gray-900 mb-3">Not Enough Data Yet</h3>
                 <p className="text-gray-600">
-                  Submit more lab results to see trends and patterns over time.
+                  Submit at least two results to start tracking your health trends over time.
                 </p>
               </div>
             )}
@@ -306,20 +299,19 @@ export default function DashboardPage() {
         </div>
 
         {/* Health Insights */}
-        <div className="card mb-8">
-          <h2 className="text-xl font-semibold text-gray-900 mb-6">Health Insights</h2>
+        <div className="card">
+          <h2 className="text-2xl font-semibold text-gray-900 mb-6">Your Health Insights</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-medical-50 rounded-lg p-4">
-              <h3 className="font-medium text-medical-900 mb-2">Recent Activity</h3>
-              <p className="text-medical-800 text-sm">
-                You've been actively monitoring your health with {totalReports} lab reports this year.
-                Keep up the great work!
+            <div className="bg-medical-50 rounded-lg p-6">
+              <h3 className="font-semibold text-medical-900 mb-3 text-lg">Proactive Monitoring</h3>
+              <p className="text-medical-800">
+                You've submitted {totalReports} reports. Consistent tracking is key to understanding your health. Keep it up!
               </p>
             </div>
-            <div className="bg-success-50 rounded-lg p-4">
-              <h3 className="font-medium text-success-900 mb-2">Recommendations</h3>
-              <p className="text-success-800 text-sm">
-                Consider scheduling your next checkup to maintain optimal health monitoring.
+            <div className="bg-success-50 rounded-lg p-6">
+              <h3 className="font-semibold text-success-900 mb-3 text-lg">Next Steps</h3>
+              <p className="text-success-800">
+                Consider discussing these results with your doctor at your next appointment to create a personalized health plan.
               </p>
             </div>
           </div>

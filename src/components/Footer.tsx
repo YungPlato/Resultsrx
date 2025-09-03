@@ -108,11 +108,18 @@ export function Footer() {
           </div>
         </div>
 
+        {/* Disclaimer */}
+        <div className="border-t border-gray-800 mt-10 pt-8">
+          <h3 className="text-lg font-semibold mb-4 text-yellow-400">Important Disclaimer</h3>
+          <p className="text-gray-400 text-sm max-w-4xl">
+            ResultRx is an AI-powered tool designed for educational purposes only. The information provided is not a substitute for professional medical advice, diagnosis, or treatment. Always seek the advice of your physician or other qualified health provider with any questions you may have regarding a medical condition. Never disregard professional medical advice or delay in seeking it because of something you have read on this website.
+          </p>
+        </div>
+
         {/* Bottom Bar */}
         <div className="border-t border-gray-800 mt-8 pt-8 text-center">
-          <p className="text-gray-400">
-            © {new Date().getFullYear()} ResultRx. All rights reserved. 
-            This tool is for educational purposes only and should not replace professional medical advice.
+          <p className="text-gray-500">
+            © {new Date().getFullYear()} ResultRx. All rights reserved.
           </p>
         </div>
       </div>
