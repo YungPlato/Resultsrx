@@ -28,9 +28,15 @@ export default function TermsOfServicePage() {
             You agree not to use the Service for any purpose that is illegal or prohibited by these Terms. You are responsible for all of your activity in connection with the Service.
           </p>
 
-          <h2 className="text-2xl font-bold mt-8 mb-4">3. Disclaimer</h2>
+          <h2 className="text-2xl font-bold mt-8 mb-4">3. Disclaimer of Warranties and Limitation of Liability</h2>
           <p>
-            The Service is provided for educational and informational purposes only. It is not intended as a substitute for professional medical advice, diagnosis, or treatment.
+            The Service is provided for educational and informational purposes only. It is not intended as a substitute for professional medical advice, diagnosis, or treatment. Always seek the advice of your physician or other qualified health provider with any questions you may have regarding a medical condition. Never disregard professional medical advice or delay in seeking it because of something you have read on the Service.
+          </p>
+          <p>
+            The Service is provided "as is" and "as available" without any warranties of any kind, express or implied. We do not warrant that the Service will be uninterrupted, timely, secure, or error-free.
+          </p>
+          <p>
+            In no event shall ResultRx, nor its directors, employees, partners, agents, suppliers, or affiliates, be liable for any indirect, incidental, special, consequential or punitive damages, including without limitation, loss of profits, data, use, goodwill, or other intangible losses, resulting from (i) your access to or use of or inability to access or use the Service; (ii) any conduct or content of any third party on the Service; (iii) any content obtained from the Service; and (iv) unauthorized access, use or alteration of your transmissions or content, whether based on warranty, contract, tort (including negligence) or any other legal theory, whether or not we have been informed of the possibility of such damage, and even if a remedy set forth herein is found to have failed of its essential purpose.
           </p>
 
           <h2 className="text-2xl font-bold mt-8 mb-4">4. Intellectual Property</h2>

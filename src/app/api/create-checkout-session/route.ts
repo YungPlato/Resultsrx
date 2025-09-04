@@ -3,10 +3,10 @@ import { NextRequest, NextResponse } from 'next/server';
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { priceId, userId, successUrl, cancelUrl } = body;
+    const { userId, successUrl, cancelUrl } = body;
 
     // Validate required fields
-    if (!priceId || !userId || !successUrl || !cancelUrl) {
+    if (!userId || !successUrl || !cancelUrl) {
       return NextResponse.json(
         { error: 'Missing required fields' },
         { status: 400 }
@@ -20,7 +20,6 @@ export async function POST(request: NextRequest) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        priceId,
         userId,
         successUrl,
         cancelUrl,

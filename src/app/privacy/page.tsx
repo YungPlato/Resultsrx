@@ -23,7 +23,12 @@ export default function PrivacyPolicyPage() {
             We only ask for personal information when we truly need it to provide a service to you. We collect it by fair and lawful means, with your knowledge and consent. We also let you know why we’re collecting it and how it will be used.
           </p>
 
-          <h2 className="text-2xl font-bold mt-8 mb-4">2. How We Use Your Information</h2>
+          <h2 className="text-2xl font-bold mt-8 mb-4">2. Data We Do Not Collect</h2>
+          <p>
+            We do not collect or store any personal health information (PHI), including but not limited to lab results, medical history, or any other data you submit for analysis. The information you provide is used only to generate the AI explanation and is not saved on our servers.
+          </p>
+
+          <h2 className="text-2xl font-bold mt-8 mb-4">3. How We Use Your Information</h2>
           <p>
             We use the information we collect in various ways, including to:
           </p>
@@ -37,7 +42,7 @@ export default function PrivacyPolicyPage() {
             <li>Find and prevent fraud</li>
           </ul>
 
-          <h2 className="text-2xl font-bold mt-8 mb-4">3. Security of Your Information</h2>
+          <h2 className="text-2xl font-bold mt-8 mb-4">4. Security of Your Information</h2>
           <p>
             We value your trust in providing us your Personal Information, thus we are striving to use commercially acceptable means of protecting it. But remember that no method of transmission over the internet, or method of electronic storage is 100% secure and reliable, and we cannot guarantee its absolute security.
           </p>

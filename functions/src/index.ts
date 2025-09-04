@@ -26,7 +26,7 @@ export const explainLab = functions.https.onRequest(async (req, res) => {
         return;
       }
 
-      // Check user subscription status
+      // Check user credits
       const userDoc = await admin.firestore().collection('users').doc(userId).get();
       if (!userDoc.exists) {
         res.status(404).json({ error: 'User not found' });
@@ -34,24 +34,13 @@ export const explainLab = functions.https.onRequest(async (req, res) => {
       }
 
       const userData = userDoc.data();
-      const subscription = userData?.subscription;
+      const credits = userData?.credits || 0;
 
-      // Check if user has access to AI explanations
-      if (subscription?.status !== 'active' && subscription?.plan !== 'pro') {
-        // Check free tier limit (1 report per month)
-        const currentMonth = new Date().toISOString().slice(0, 7); // YYYY-MM
-        const reportsThisMonth = await admin.firestore()
-          .collection('labReports')
-          .where('userId', '==', userId)
-          .where('createdAt', '>=', new Date(currentMonth))
-          .get();
-
-        if (reportsThisMonth.size >= 1) {
-          res.status(403).json({ 
-            error: 'Free tier limit reached. Upgrade to Pro for unlimited reports.' 
-          });
-          return;
-        }
+      if (credits <= 0) {
+        res.status(403).json({
+          error: 'You have no credits left. Please purchase more to get an explanation.',
+        });
+        return;
       }
 
       // Generate AI explanation
@@ -81,7 +70,9 @@ IMPORTANT RULES:
 - Use plain, everyday language. Avoid medical jargon.
 - Maintain a supportive and reassuring tone throughout.
 - Ensure the JSON is perfectly formatted.
-- The user is a patient, not a doctor. Address them directly and with empathy.`;
+- The user is a patient, not a doctor. Address them directly and with empathy.
+- At the end of the friendlyExplanation, add the following sentence: 'Remember, this is not a substitute for professional medical advice.'
+- Add a new field to the JSON called 'importantNote' and set its value to 'This AI-powered explanation is for informational purposes only and should not be used as a substitute for professional medical advice, diagnosis, or treatment. Always seek the advice of your physician or other qualified health provider with any questions you may have regarding a medical condition.'`;
 
       const result = await model.generateContent(prompt);
       const response = await result.response;
@@ -106,23 +97,14 @@ IMPORTANT RULES:
         };
       }
 
-      // Store the lab report
-      const labReport = {
-        userId,
-        testName,
-        value,
-        units,
-        normalRange,
-        aiExplanation: aiResponse,
-        createdAt: admin.firestore.FieldValue.serverTimestamp(),
-      };
-
-      await admin.firestore().collection('labReports').add(labReport);
+      // Decrement user's credits
+      await admin.firestore().collection('users').doc(userId).update({
+        credits: admin.firestore.FieldValue.increment(-1),
+      });
 
       res.json({
         success: true,
         explanation: aiResponse,
-        reportId: labReport.createdAt
       });
 
     } catch (error) {
@@ -135,14 +117,20 @@ IMPORTANT RULES:
 export const createStripeCheckoutSession = functions.https.onRequest(async (req, res) => {
   return corsHandler(req, res, async () => {
     try {
-      const { priceId, userId, successUrl, cancelUrl } = req.body;
+      const { userId, successUrl, cancelUrl } = req.body;
 
       const session = await stripe.checkout.sessions.create({
-        mode: 'subscription',
+        mode: 'payment',
         payment_method_types: ['card'],
         line_items: [
           {
-            price: priceId,
+            price_data: {
+              currency: 'usd',
+              product_data: {
+                name: 'ResultRx AI Explanation',
+              },
+              unit_amount: 999,
+            },
             quantity: 1,
           },
         ],
@@ -178,33 +166,13 @@ export const stripeWebhook = functions.https.onRequest(async (req, res) => {
 
   try {
     switch (event.type) {
-      case 'customer.subscription.created':
-      case 'customer.subscription.updated':
-        const subscription = event.data.object;
-        const userId = subscription.metadata.userId;
+      case 'checkout.session.completed':
+        const session = event.data.object;
+        const userId = session.metadata.userId;
 
         if (userId) {
           await admin.firestore().collection('users').doc(userId).update({
-            subscription: {
-              status: subscription.status,
-              plan: subscription.items.data[0].price.id === 'price_pro' ? 'pro' : 'free',
-              currentPeriodEnd: new Date(subscription.current_period_end * 1000),
-            },
-          });
-        }
-        break;
-
-      case 'customer.subscription.deleted':
-        const deletedSubscription = event.data.object;
-        const deletedUserId = deletedSubscription.metadata.userId;
-
-        if (deletedUserId) {
-          await admin.firestore().collection('users').doc(deletedUserId).update({
-            subscription: {
-              status: 'canceled',
-              plan: 'free',
-              currentPeriodEnd: null,
-            },
+            credits: admin.firestore.FieldValue.increment(1),
           });
         }
         break;

@@ -22,6 +22,7 @@ interface AIExplanation {
   whatYourResultMeans: string;
   potentialNextSteps: string[];
   suggestedQuestions: string[];
+  importantNote: string;
 }
 
 export function LabSubmissionForm({ onClose }: LabSubmissionFormProps) {
@@ -192,9 +193,7 @@ export function LabSubmissionForm({ onClose }: LabSubmissionFormProps) {
               <div className="text-sm text-yellow-800">
                 <p className="font-medium">Important Disclaimer</p>
                 <p className="mt-1">
-                  This AI explanation is for educational purposes only and should not replace 
-                  professional medical advice. Always consult with your healthcare provider 
-                  about your lab results and any health concerns.
+                  {explanation.importantNote}
                 </p>
               </div>
             </div>
@@ -239,6 +238,17 @@ export function LabSubmissionForm({ onClose }: LabSubmissionFormProps) {
         </div>
       )}
 
+      <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-4">
+        <div className="flex items-start space-x-2">
+          <AlertCircle className="w-5 h-5 text-yellow-600 mt-0.5 flex-shrink-0" />
+          <div className="text-sm text-yellow-800">
+            <p className="font-medium">Important Disclaimer</p>
+            <p className="mt-1">
+              This tool provides AI-generated explanations for educational purposes only and is not a substitute for professional medical advice. Always consult with your healthcare provider. By using this tool, you agree to our <a href="/terms" target="_blank" className="underline">Terms of Service</a>.
+            </p>
+          </div>
+        </div>
+      </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <label htmlFor="testName" className="block text-sm font-medium text-gray-700 mb-2">
